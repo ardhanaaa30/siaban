@@ -37,6 +37,10 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::patch('/users/{user}', [\App\Http\Controllers\UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
     Route::patch('/users/{user}/role', [\App\Http\Controllers\UserController::class, 'updateRole'])->name('users.update-role');
+
+    Route::get('/reset-requests', [\App\Http\Controllers\UserController::class, 'resetRequests'])->name('users.reset-requests');
+    Route::post('/reset-requests/{request}/approve', [\App\Http\Controllers\UserController::class, 'approveReset'])->name('users.reset-requests.approve');
+    Route::post('/reset-requests/{request}/reject', [\App\Http\Controllers\UserController::class, 'rejectReset'])->name('users.reset-requests.reject');
 });
 
 require __DIR__.'/auth.php';

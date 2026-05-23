@@ -56,9 +56,15 @@
                             <x-input-error :messages="$errors->get('role')" class="mt-2" />
                         </div>
 
-                        <div class="space-y-2">
+                        <div class="space-y-2" x-data="{ show: false }">
                             <x-input-label for="password" value="Password Baru (Opsional)" class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1" />
-                            <x-text-input id="password" name="password" type="password" class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold focus:ring-2 focus:ring-cyan-500/20" placeholder="Biarkan kosong jika tidak ingin ganti" />
+                            <div class="relative group">
+                                <x-text-input id="password" name="password" ::type="show ? 'text' : 'password'" class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold focus:ring-2 focus:ring-cyan-500/20" placeholder="Biarkan kosong jika tidak ingin ganti" />
+                                <button type="button" @click="show = !show" class="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 hover:text-cyan-600 group-focus-within:text-cyan-500 transition-colors focus:outline-none">
+                                    <svg x-show="!show" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    <svg x-show="show" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path></svg>
+                                </button>
+                            </div>
                             <p class="text-[10px] font-bold text-slate-400 ml-1 mt-1 uppercase tracking-widest">Kosongkan jika tidak ingin mengubah password.</p>
                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
