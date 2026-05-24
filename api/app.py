@@ -7,7 +7,6 @@ import os
 import joblib
 import warnings
 
-# Suppress TF warnings for clean logs
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 warnings.filterwarnings('ignore')
 
@@ -19,13 +18,11 @@ except ImportError:
 
 app = FastAPI(title="Flood Detection LSTM API")
 
-# Setup paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, 'models', 'best_lstm_model.keras')
 SCALER_PATH = os.path.join(BASE_DIR, 'models', 'minmax_scaler.pkl')
 ENCODER_PATH = os.path.join(BASE_DIR, 'models', 'label_encoder.pkl')
 
-# Load models globally
 model = None
 scaler = None
 encoder = None
@@ -61,15 +58,10 @@ def read_root():
 def predict(request: PredictionRequest):
     sequence = request.sequence
     
-    # Validation
     if not sequence:
         raise HTTPException(status_code=400, detail="Sequence cannot be empty")
     
-    # ---------------------------------------------------------
-    # INFERENCE LOGIC (Reusable)
-    # ---------------------------------------------------------
     def run_inference(seq):
-        # Fallback Mock
         if model is None or scaler is None or encoder is None:
             latest_val = seq[-1]
             if latest_val > 2.5:
@@ -83,11 +75,9 @@ def predict(request: PredictionRequest):
                 probs = {"Aman": 0.90, "Siaga": 0.08, "Bahaya": 0.02}
             return pred, max(probs.values()), probs
 
-        # Actual Inference
         latest_val = seq[-1]
         rule_based_pred = "Aman"
         
-        # User thresholds: 
         # Tinggi < 3.5m: Aman
         # 3.5m - 5m: Siaga
         # >= 5m: Bahaya
@@ -106,7 +96,7 @@ def predict(request: PredictionRequest):
             sequence_padded = seq[-target_timesteps:]
             
         data = np.zeros((target_timesteps, num_features))
-        data[:, 0] = sequence_padded # Water level in 1st column
+        data[:, 0] = sequence_padded 
         
         scaled_data = scaler.transform(data)
         lstm_input = scaled_data.reshape(1, target_timesteps, num_features)
@@ -116,22 +106,18 @@ def predict(request: PredictionRequest):
         class_index = np.argmax(probabilities)
         lstm_pred = encoder.inverse_transform([class_index])[0]
         
-        # 3. Hybrid Logic: Use Rule-based as floor, LSTM can escalate but not de-escalate safety
         status_priority = {"Aman": 0, "Siaga": 1, "Bahaya": 2}
 
         final_pred = rule_based_pred
-        final_confidence = 1.0 # Default for rule-based
+        final_confidence = 1.0
 
-        # Format output probabilities
         classes = encoder.classes_
         prob_dict = {str(cls): float(prob) for cls, prob in zip(classes, probabilities)}
 
         if status_priority.get(lstm_pred, 0) > status_priority.get(rule_based_pred, 0):
-            # AI detected a more dangerous trend, use AI prediction and its confidence
             final_pred = lstm_pred
             final_confidence = float(prob_dict.get(str(lstm_pred), 0.0))
         else:
-            # Rule-based logic is dominant or matches AI, it's 100% certain based on height
             final_confidence = 1.0
 
         return str(final_pred), final_confidence, prob_dict
@@ -149,7 +135,6 @@ def predict(request: PredictionRequest):
 
 @app.post("/predict-excel", response_model=PredictionResponse)
 def predict_excel():
-    # Path to public/data_realtime.xlsx
     excel_path = os.path.join(os.path.dirname(BASE_DIR), 'public', 'data_realtime.xlsx')
     
     if not os.path.exists(excel_path):
@@ -162,7 +147,6 @@ def predict_excel():
         if col not in df.columns:
             raise HTTPException(status_code=400, detail="Water level column not found in Excel")
             
-        # Extract last 24 values
         sequence = []
         for val in df[col].tail(24).values:
             if isinstance(val, str):
