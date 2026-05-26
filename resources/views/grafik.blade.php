@@ -9,36 +9,46 @@
             </div>
             
             <div class="flex flex-wrap items-center gap-4">
-                <!-- Filter Rentang Hari -->
-                <form method="GET" action="{{ route('grafik') }}" class="flex items-center gap-4 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm">
-                    <label for="days" class="text-xs font-black text-slate-400 uppercase tracking-widest ml-4">Rentang:</label>
-                    <select name="days" id="days" onchange="this.form.submit()" class="bg-slate-50 border-none text-slate-900 text-sm font-bold rounded-xl focus:ring-2 focus:ring-cyan-500/20 block py-2 px-6">
-                        <option value="1" {{ $days == 1 && !$month ? 'selected' : '' }}>24 Jam</option>
-                        <option value="7" {{ $days == 7 && !$month ? 'selected' : '' }}>7 Hari</option>
-                        <option value="30" {{ $days == 30 && !$month ? 'selected' : '' }}>30 Hari</option>
-                    </select>
-                </form>
+                <form method="GET" action="{{ route('grafik') }}" class="flex flex-wrap items-center gap-4 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm">
+                    <input type="hidden" name="search" value="1">
+                    
+                    <!-- Filter Rentang -->
+                    <div class="flex items-center gap-2 px-2">
+                        <label for="days" class="text-xs font-black text-slate-400 uppercase tracking-widest ml-2">Rentang:</label>
+                        <select name="days" id="days" class="bg-slate-50 border-none text-slate-900 text-sm font-bold rounded-xl focus:ring-2 focus:ring-cyan-500/20 block py-2 px-4">
+                            <option value="">Pilih Rentang</option>
+                            <option value="1" {{ $days == 1 ? 'selected' : '' }}>24 Jam</option>
+                            <option value="7" {{ $days == 7 ? 'selected' : '' }}>7 Hari</option>
+                            <option value="30" {{ $days == 30 ? 'selected' : '' }}>30 Hari</option>
+                        </select>
+                    </div>
 
-                <!-- Filter Bulan -->
-                <form method="GET" action="{{ route('grafik') }}" class="flex items-center gap-4 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm">
-                    <label for="month" class="text-xs font-black text-slate-400 uppercase tracking-widest ml-4">Bulan:</label>
-                    <select name="month" id="month" class="bg-slate-50 border-none text-slate-900 text-sm font-bold rounded-xl focus:ring-2 focus:ring-cyan-500/20 block py-2 px-4">
-                        <option value="">Pilih Bulan</option>
-                        @for ($m = 1; $m <= 12; $m++)
-                            <option value="{{ $m }}" {{ $month == $m ? 'selected' : '' }}>
-                                {{ Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
-                            </option>
-                        @endfor
-                    </select>
-                    <select name="year" id="year" class="bg-slate-50 border-none text-slate-900 text-sm font-bold rounded-xl focus:ring-2 focus:ring-cyan-500/20 block py-2 px-4">
-                        @for ($y = Carbon\Carbon::now()->year; $y >= Carbon\Carbon::now()->year - 2; $y--)
-                            <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
-                        @endfor
-                    </select>
-                    <button type="submit" class="bg-cyan-600 text-white p-2.5 rounded-xl hover:bg-cyan-700 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <div class="hidden md:block h-8 w-px bg-slate-100 mx-2"></div>
+
+                    <!-- Filter Bulan -->
+                    <div class="flex items-center gap-2 px-2">
+                        <label for="month" class="text-xs font-black text-slate-400 uppercase tracking-widest ml-2">Bulan:</label>
+                        <select name="month" id="month" class="bg-slate-50 border-none text-slate-900 text-sm font-bold rounded-xl focus:ring-2 focus:ring-cyan-500/20 block py-2 px-4">
+                            <option value="">Pilih Bulan</option>
+                            @for ($m = 1; $m <= 12; $m++)
+                                <option value="{{ $m }}" {{ $month == $m ? 'selected' : '' }}>
+                                    {{ Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+                                </option>
+                            @endfor
+                        </select>
+                        <select name="year" id="year" class="bg-slate-50 border-none text-slate-900 text-sm font-bold rounded-xl focus:ring-2 focus:ring-cyan-500/20 block py-2 px-4">
+                            @for ($y = Carbon\Carbon::now()->year; $y >= Carbon\Carbon::now()->year - 2; $y--)
+                                <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                            @endfor
+                        </select>
+                    </div>
+
+                    <button type="submit" class="bg-cyan-600 text-white px-6 py-2.5 rounded-xl hover:bg-cyan-700 transition-all font-bold text-sm shadow-sm shadow-cyan-200 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        Cari Data
                     </button>
-                    @if($month)
+
+                    @if($isSearching)
                         <a href="{{ route('grafik') }}" class="bg-slate-100 text-slate-500 p-2.5 rounded-xl hover:bg-slate-200 transition-colors" title="Reset Filter">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </a>
@@ -49,21 +59,29 @@
     </x-slot>
 
     <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 p-10">
-        @if(count($chartData) > 0)
-            <div class="relative h-[65vh] w-full">
-                <canvas id="mainWaterChart"></canvas>
-            </div>
+        @if($isSearching)
+            @if(count($chartData) > 0)
+                <div class="relative h-[65vh] w-full">
+                    <canvas id="mainWaterChart"></canvas>
+                </div>
+            @else
+                <div class="flex flex-col items-center justify-center h-[65vh] text-center">
+                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-10 h-10 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900 mb-2">Tidak Ada Data</h3>
+                    <p class="text-slate-500 font-medium">Data sensor tidak ditemukan untuk periode {{ $title }}.</p>
+                </div>
+            @endif
         @else
             <div class="flex flex-col items-center justify-center h-[65vh] text-center">
-                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-10 h-10 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <div class="w-24 h-24 bg-cyan-50 rounded-full flex items-center justify-center mb-8">
+                    <svg class="w-12 h-12 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    </svg>
                 </div>
-                <h3 class="text-xl font-black text-slate-900 mb-2">Tidak Ada Data</h3>
-                <p class="text-slate-500 font-medium">Data sensor tidak ditemukan untuk periode {{ $title }}.</p>
-                <a href="{{ route('grafik') }}" class="mt-8 text-cyan-600 font-bold hover:text-cyan-700 transition-colors uppercase tracking-widest text-xs flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Kembali ke 7 Hari Terakhir
-                </a>
+                <h3 class="text-2xl font-black text-slate-900 mb-3">Siap Menampilkan Grafik</h3>
+                <p class="text-slate-500 font-medium max-w-sm mx-auto">Silakan pilih rentang waktu atau bulan tertentu pada filter di atas untuk melihat visualisasi tinggi air.</p>
             </div>
         @endif
     </div>

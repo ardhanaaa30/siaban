@@ -30,31 +30,43 @@ class MonitoringController extends Controller
 
     public function grafikTinggiAir(Request $request)
     {
-        $days = $request->input('days', 7);
+        $days = $request->input('days');
         $month = $request->input('month');
         $year = $request->input('year', Carbon::now()->year);
+        $isSearching = $request->has('search');
 
-        $query = SensorReading::query();
+        $chartLabels = [];
+        $chartData = [];
+        $title = "Visualisasi Data";
 
-        if ($month) {
-            $query->whereMonth('datetime', $month)
-                  ->whereYear('datetime', $year);
-            $title = Carbon::create($year, $month)->translatedFormat('F Y');
-            $format = 'd M H:i';
-        } else {
-            $query->where('datetime', '>=', Carbon::now()->subDays($days));
-            $title = "$days Hari Terakhir";
-            $format = $days <= 1 ? 'H:i' : 'd M H:i';
+        if ($isSearching) {
+            $query = SensorReading::query();
+
+            if ($month) {
+                $query->whereMonth('datetime', $month)
+                      ->whereYear('datetime', $year);
+                $title = Carbon::create($year, $month)->translatedFormat('F Y');
+                $format = 'd M H:i';
+            } elseif ($days) {
+                $query->where('datetime', '>=', Carbon::now()->subDays($days));
+                $title = "$days Hari Terakhir";
+                $format = $days <= 1 ? 'H:i' : 'd M H:i';
+            } else {
+                // If search button clicked but nothing selected, default to 7 days or handle accordingly
+                $query->where('datetime', '>=', Carbon::now()->subDays(7));
+                $title = "7 Hari Terakhir";
+                $format = 'd M H:i';
+                $days = 7;
+            }
+
+            $readings = $query->orderBy('datetime', 'asc')->get();
+            $chartLabels = $readings->pluck('datetime')->map(function ($date) use ($format) {
+                return $date->format($format);
+            });
+            $chartData = $readings->pluck('tinggi_air');
         }
 
-        $readings = $query->orderBy('datetime', 'asc')->get();
-
-        $chartLabels = $readings->pluck('datetime')->map(function ($date) use ($format) {
-            return $date->format($format);
-        });
-        $chartData = $readings->pluck('tinggi_air');
-
-        return view('grafik', compact('chartLabels', 'chartData', 'days', 'month', 'year', 'title'));
+        return view('grafik', compact('chartLabels', 'chartData', 'days', 'month', 'year', 'title', 'isSearching'));
     }
 
     public function historiData(Request $request)
