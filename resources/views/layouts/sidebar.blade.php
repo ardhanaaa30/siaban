@@ -42,6 +42,11 @@
             Grafik Tinggi Air
         </a>
 
+        <a href="{{ route('suggestions.index') }}" class="flex items-center gap-4 px-6 py-4 rounded-2xl transition-all {{ request()->routeIs('suggestions*') ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-200 font-black' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900 font-bold' }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+            Saran Warga
+        </a>
+
         @if(in_array(Auth::user()->role, ['Admin']))
         <a href="{{ route('histori') }}" class="flex items-center gap-4 px-6 py-4 rounded-2xl transition-all {{ request()->routeIs('histori') ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-200 font-black' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900 font-bold' }}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

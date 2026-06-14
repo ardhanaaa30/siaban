@@ -35,6 +35,10 @@
                         {{ __('Grafik') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('suggestions.index')" :active="request()->routeIs('suggestions*')">
+                        {{ __('Saran') }}
+                    </x-nav-link>
+
                     @if(in_array(Auth::user()->role, ['Admin']))
                     <x-nav-link :href="route('histori')" :active="request()->routeIs('histori')">
                         {{ __('Histori') }}

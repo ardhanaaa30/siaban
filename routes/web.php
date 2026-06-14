@@ -13,6 +13,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/grafik', [\App\Http\Controllers\MonitoringController::class, 'grafikTinggiAir'])->name('grafik');
 
+    Route::get('/saran', [\App\Http\Controllers\SuggestionController::class, 'index'])->name('suggestions.index');
+    Route::post('/saran', [\App\Http\Controllers\SuggestionController::class, 'store'])->name('suggestions.store');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
