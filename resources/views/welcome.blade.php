@@ -117,6 +117,8 @@
                     </div>
                 </div>
             </main>
+
+            <x-suggestion-form />
         </div>
     </body>
 </html>

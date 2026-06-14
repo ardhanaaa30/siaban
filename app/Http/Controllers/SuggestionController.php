@@ -22,14 +22,18 @@ class SuggestionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'nama' => 'required|string|max:255',
+            'alamat' => 'required|string|max:255',
             'content' => 'required|string|max:1000',
         ]);
 
         Suggestion::create([
             'user_id' => auth()->id(),
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
             'content' => $request->content,
         ]);
 
-        return redirect()->route('suggestions.index')->with('status', 'saran-terkirim');
+        return back()->with('status', 'saran-terkirim');
     }
 }

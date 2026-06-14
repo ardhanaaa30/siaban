@@ -11,6 +11,8 @@ class Suggestion extends Model
 
     protected $fillable = [
         'user_id',
+        'nama',
+        'alamat',
         'content',
     ];
 

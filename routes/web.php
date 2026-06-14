@@ -13,18 +13,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/grafik', [\App\Http\Controllers\MonitoringController::class, 'grafikTinggiAir'])->name('grafik');
 
-    Route::get('/saran', [\App\Http\Controllers\SuggestionController::class, 'index'])->name('suggestions.index');
-    Route::post('/saran', [\App\Http\Controllers\SuggestionController::class, 'store'])->name('suggestions.store');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Suggestions store route - accessible to everyone
+Route::post('/saran', [\App\Http\Controllers\SuggestionController::class, 'store'])->name('suggestions.store');
+
 // Admin and Staff routes
 Route::middleware(['auth', 'role:Admin,Staff'])->group(function () {
     Route::get('/prediksi', [\App\Http\Controllers\MonitoringController::class, 'prediksiBanjir'])->name('prediksi');
     Route::post('/prediksi', [\App\Http\Controllers\MonitoringController::class, 'prosesPrediksi'])->name('prediksi.proses'); // Placeholder for Phase 7
+
+    Route::get('/saran', [\App\Http\Controllers\SuggestionController::class, 'index'])->name('suggestions.index');
 });
 
 // Admin ONLY routes
