@@ -3,6 +3,10 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
         <title>SIABAN - Sistem Informasi Banjir</title>
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700" rel="stylesheet" />
@@ -23,9 +27,7 @@
             <!-- Navbar -->
             <nav class="max-w-7xl mx-auto px-8 py-10 flex justify-between items-center">
                 <div class="flex items-center gap-4">
-                    <div class="p-3 bg-cyan-600 rounded-2xl shadow-xl shadow-cyan-200">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" class="w-12 h-12 object-contain" alt="Siaban Logo">
                     <span class="text-2xl font-black tracking-tighter">SIABAN</span>
                 </div>
                 <div class="flex items-center gap-6">

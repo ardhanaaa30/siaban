@@ -6,9 +6,7 @@
     
     <!-- Sidebar Header -->
     <div class="flex items-center gap-4 px-8 h-24 border-b border-slate-50">
-        <div class="p-2.5 bg-cyan-600 rounded-2xl shadow-lg shadow-cyan-200">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-        </div>
+        <x-application-logo class="w-10 h-10 object-contain" />
         <a href="{{ route('dashboard') }}" class="text-2xl font-black tracking-tighter text-slate-900">
             SIABAN
         </a>

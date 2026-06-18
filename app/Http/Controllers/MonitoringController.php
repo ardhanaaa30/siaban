@@ -37,6 +37,10 @@ class MonitoringController extends Controller
 
         $chartLabels = [];
         $chartData = [];
+        $chartStatuses = [];
+        $latestReading = null;
+        $trend = 'stable';
+        $diff = 0.0;
         $title = "Visualisasi Data";
 
         if ($isSearching) {
@@ -64,9 +68,35 @@ class MonitoringController extends Controller
                 return $date->format($format);
             });
             $chartData = $readings->pluck('tinggi_air');
+            $chartStatuses = $readings->pluck('status_prediksi')->map(function ($status) {
+                return $status ?? 'Aman';
+            })->toArray();
+
+            $latestReading = $readings->last();
+            if ($readings->count() > 1 && $latestReading) {
+                $prevReading = $readings->get($readings->count() - 2);
+                $diff = $latestReading->tinggi_air - $prevReading->tinggi_air;
+                if ($diff > 0) {
+                    $trend = 'up';
+                } elseif ($diff < 0) {
+                    $trend = 'down';
+                }
+            }
         }
 
-        return view('grafik', compact('chartLabels', 'chartData', 'days', 'month', 'year', 'title', 'isSearching'));
+        return view('grafik', compact(
+            'chartLabels', 
+            'chartData', 
+            'chartStatuses', 
+            'days', 
+            'month', 
+            'year', 
+            'title', 
+            'isSearching',
+            'latestReading',
+            'trend',
+            'diff'
+        ));
     }
 
     public function historiData(Request $request)

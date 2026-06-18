@@ -10,9 +10,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                        <div class="p-2.5 bg-cyan-600 rounded-2xl shadow-lg shadow-cyan-200">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        </div>
+                        <x-application-logo class="w-10 h-10 object-contain" />
                         <span class="text-xl font-extrabold tracking-tight text-slate-900">SIABAN</span>
                     </a>
                 </div>
@@ -121,9 +119,7 @@
         <!-- Mobile Menu Header (Fixed at top) -->
         <div class="flex-none flex items-center justify-between h-16 px-4 border-b border-slate-100 bg-white">
             <div class="flex items-center gap-3">
-                <div class="p-2 bg-gradient-to-br from-cyan-600 to-cyan-500 rounded-xl shadow-lg shadow-cyan-200">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
+                <x-application-logo class="w-8 h-8 object-contain" />
                 <div class="flex flex-col">
                     <span class="text-base font-black tracking-tight text-slate-900 leading-none">SIABAN</span>
                     <span class="text-[9px] font-bold text-cyan-600 uppercase tracking-widest mt-0.5">Menu Navigasi</span>

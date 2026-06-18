@@ -7,6 +7,9 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700" rel="stylesheet" />
@@ -36,8 +39,8 @@
                 </div>
 
                 <div class="relative z-10 text-center">
-                    <div class="inline-flex p-6 bg-white/10 backdrop-blur-xl rounded-[3rem] mb-10 shadow-2xl border border-white/20">
-                        <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <div class="inline-flex p-6 bg-white rounded-[3rem] mb-10 shadow-2xl">
+                        <x-application-logo class="w-20 h-20 object-contain" />
                     </div>
                     <h1 class="text-6xl font-black text-white tracking-tighter mb-6 text-center">SIABAN</h1>
                     <p class="text-cyan-100 text-xl font-bold max-w-md mx-auto leading-relaxed text-center opacity-90 uppercase tracking-widest">
@@ -58,9 +61,7 @@
                     <!-- Mobile Logo -->
                     <div class="lg:hidden flex justify-center mb-10">
                         <a href="/" class="flex items-center gap-3">
-                            <div class="p-3 bg-cyan-600 rounded-2xl shadow-lg shadow-cyan-200">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            </div>
+                            <x-application-logo class="w-12 h-12 object-contain" />
                             <span class="text-3xl font-black tracking-tight text-slate-900 uppercase">SIABAN</span>
                         </a>
                     </div>
